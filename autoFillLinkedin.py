@@ -7,21 +7,25 @@ from dotenv import load_dotenv
 import os
 import openpyxl
 from openpyxl import load_workbook
+from openpyxl.styles import PatternFill
 from datetime import date
+
 
 print('Paste linkedin URL while clicked on the job you just applied to')
 url = input()
 
+#TODO make headless an option
 # # #runs selenium browser invisibly so you can just operate from CLI
-chrome_options = Options()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument("--window-size=1920,1080")
-chrome_options.add_argument('--ignore-certificate-errors')
-chrome_options.add_argument('--allow-running-insecure-content')
+# chrome_options = Options()
+# chrome_options.add_argument('--headless')
+# chrome_options.add_argument("--window-size=1920,1080")
+# chrome_options.add_argument('--ignore-certificate-errors')
+# chrome_options.add_argument('--allow-running-insecure-content')
 
 
 print('Loading Linkedin...')
-browser = webdriver.Chrome(options=chrome_options)
+# browser = webdriver.Chrome(options=chrome_options)
+browser = webdriver.Chrome()
 browser.get(url)
 browser.maximize_window()
 time.sleep(2)
@@ -47,7 +51,7 @@ signInBtn2 = browser.find_element(By.XPATH, '/html/body/div/main/div[2]/div[1]/f
 usernameInput.send_keys(username)
 passwordInput.send_keys(password)
 signInBtn2.click()
-time.sleep(3)
+time.sleep(20)
 
 print('Login Successful!')
 #If this was a larger project, make a dict for each of the values keeping info like cell, innerhtml so that you don't have to manually update when making changes
@@ -73,6 +77,7 @@ if not (os.path.isfile(cwd+'/Job_Search_Log.xlsx')):
     ws.column_dimensions['E'].width = 15
     ws.column_dimensions['F'].width = 25
     ws.column_dimensions['G'].width = 15
+    ws.freeze_panes = "A2"
     wb.save(cwd+'/Job_Search_Log.xlsx')
     wb.close()
 
@@ -81,6 +86,12 @@ editBook = load_workbook(filename=cwd+'/Job_Search_Log.xlsx')
 ws = editBook.active
 rowToWrite = str(ws.max_row + 1)
 print('Writing to row ' + rowToWrite + '...')
+
+#color even rows
+if int(rowToWrite)%2 == 0:
+    cell = ws[('A'+rowToWrite):('G'+rowToWrite)]
+    for i in cell[0]:
+        i.fill = PatternFill(start_color='0099CC00', end_color='0099CC00', fill_type='solid')
 
 
 #try to find the element and write it to the sheet. If anything fails, easy exit with an except and print an error
