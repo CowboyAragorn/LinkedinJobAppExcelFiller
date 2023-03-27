@@ -65,6 +65,14 @@ if not (os.path.isfile(cwd+'/Job_Search_Log.xlsx')):
     ws['E1'] = 'Link'
     ws['F1'] = 'Salary'
     ws['G1'] = 'Workplace Type'
+
+    ws.column_dimensions['A'].width = 25
+    ws.column_dimensions['B'].width = 25
+    ws.column_dimensions['C'].width = 15
+    ws.column_dimensions['D'].width = 25
+    ws.column_dimensions['E'].width = 15
+    ws.column_dimensions['F'].width = 25
+    ws.column_dimensions['G'].width = 15
     wb.save(cwd+'/Job_Search_Log.xlsx')
     wb.close()
 
