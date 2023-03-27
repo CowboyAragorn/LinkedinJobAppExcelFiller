@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import os
 import openpyxl
 from openpyxl import load_workbook
-from openpyxl.styles import PatternFill
+from openpyxl.styles import PatternFill, Font
 from datetime import date
 
 
@@ -21,10 +21,9 @@ url = input()
 # chrome_options.add_argument("--window-size=1920,1080")
 # chrome_options.add_argument('--ignore-certificate-errors')
 # chrome_options.add_argument('--allow-running-insecure-content')
-
+# browser = webdriver.Chrome(options=chrome_options)
 
 print('Loading Linkedin...')
-# browser = webdriver.Chrome(options=chrome_options)
 browser = webdriver.Chrome()
 browser.get(url)
 browser.maximize_window()
@@ -76,7 +75,13 @@ if not (os.path.isfile(cwd+'/Job_Search_Log.xlsx')):
     ws.column_dimensions['D'].width = 25
     ws.column_dimensions['E'].width = 15
     ws.column_dimensions['F'].width = 25
-    ws.column_dimensions['G'].width = 15
+    ws.column_dimensions['G'].width = 20
+    ws.row_dimensions[1].height = 15
+    cell = ws[('A1'):('G1')]
+    for i in cell[0]:
+        i.fill = PatternFill(start_color='00008000', end_color='00008000', fill_type='solid')
+        i.font = Font(bold=True, size=13, color='00FFFFFF')
+
     ws.freeze_panes = "A2"
     wb.save(cwd+'/Job_Search_Log.xlsx')
     wb.close()

@@ -8,3 +8,5 @@ FOR SCRIPT TO WORK:
    secrets.env will need to contain:
    USERNME="yourusernamehere"
    PASSWORD="yourpasswordhere"
+
+At a certain point, linkedin will prompt you to complete a challenge to prove you are not a computer. Defeats this script, so far this only comes up after running script tens of times (don't have an exact number yet) a day. If that comes up, run the script in debug visual mode(to be made) and complete the captcha.
