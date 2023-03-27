@@ -63,6 +63,8 @@ if not (os.path.isfile(cwd+'/Job_Search_Log.xlsx')):
     ws['C1'] = 'Date'
     ws['D1'] = 'Location'
     ws['E1'] = 'Link'
+    ws['F1'] = 'Salary'
+    ws['G1'] = 'Workplace Type'
     wb.save(cwd+'/Job_Search_Log.xlsx')
     wb.close()
 
@@ -111,7 +113,19 @@ try:
     ws['E' + rowToWrite] = str(postingLink)
 except: 
     print('link failed')
-
+#SALARY
+try:
+    salary = browser.find_element(By.XPATH, '/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[2]/ul/li[1]/span/a')
+    #print(postingLink)
+    ws['F' + rowToWrite] = str(salary.text)
+except:
+    print('No Salary Available')
+#WORKPLACE TYPE
+try:
+    remote = browser.find_element(By.XPATH, '/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[1]/span[1]/span[3]')
+    ws['G' + rowToWrite] = str(remote.text)
+except: 
+    print('No Remote Info Available')
 editBook.save(cwd+'/Job_Search_Log.xlsx')
 #TODO: tell what you are writing to workbook, ie writing [name,company]
 print('Workbook saved!')
