@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import os
 import openpyxl
 from openpyxl import load_workbook
+from datetime import date
 
 print('Paste linkedin URL while clicked on the job you just applied to')
 url = input()
@@ -49,6 +50,7 @@ signInBtn2.click()
 time.sleep(3)
 
 print('Login Successful!')
+#If this was a larger project, make a dict for each of the values keeping info like cell, innerhtml so that you don't have to manually update when making changes
 #create excel if it doesn't exists
 if not (os.path.isfile(cwd+'/Job_Search_Log.xlsx')):
     print('Creating workbook...')
@@ -58,8 +60,9 @@ if not (os.path.isfile(cwd+'/Job_Search_Log.xlsx')):
     ws.title ='Job_Search_Log'
     ws['A1'] = 'Name'
     ws['B1'] = 'Company'
-    ws['C1'] = 'Location'
-    ws['D1'] = 'Link'
+    ws['C1'] = 'Date'
+    ws['D1'] = 'Location'
+    ws['E1'] = 'Link'
     wb.save(cwd+'/Job_Search_Log.xlsx')
     wb.close()
 
@@ -86,15 +89,18 @@ try:
     ws['B' + rowToWrite] = str(company.text)
 except: 
     print('company failed')
+#DATE
 try:
-    print('date')
+    today = date.today()
+    date = today.strftime("%B %d, %Y")
+    ws['C' + rowToWrite] = str(date)
 except: 
     print('Date failed')
 #LOCATION
 try:
     location = browser.find_element(By.XPATH, '/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[1]/span[1]/span[2]')
     #print(location.text)
-    ws['C' + rowToWrite] = str(location.text)
+    ws['D' + rowToWrite] = str(location.text)
 except: 
     print('location failed')
 #LINK
@@ -102,7 +108,7 @@ try:
     postingLink = browser.find_element(By.XPATH, '/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/a')
     postingLink = postingLink.get_attribute('href')
     #print(postingLink)
-    ws['D' + rowToWrite] = str(postingLink)
+    ws['E' + rowToWrite] = str(postingLink)
 except: 
     print('link failed')
 
