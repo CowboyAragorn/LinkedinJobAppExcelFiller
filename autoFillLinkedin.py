@@ -48,38 +48,7 @@ passwordInput.send_keys(password)
 signInBtn2.click()
 time.sleep(3)
 
-#TODO: add date, easyapply, etc
-
-print('Success! Saving job info to local variables')
-try:
-    name = browser.find_element(By.XPATH, '/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/a/h2')
-    #print(name.text)
-except: 
-    print('name failed')
-try:
-    company = browser.find_element(By.XPATH,'/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[1]/span[1]/span[1]/a' )
-    #print(company.text)
-except: 
-    print('company failed')
-try:
-    location = browser.find_element(By.XPATH, '/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[1]/span[1]/span[2]')
-    #print(location.text)
-except: 
-    print('location failed')
-try:
-    postingLink = browser.find_element(By.XPATH, '/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/a')
-    postingLink = postingLink.get_attribute('href')
-    #print(postingLink)
-except: 
-    print('link failed')
-
-#postingLink = postingLink.get_attribute('href')
-# print(name.text)
-# print(company.text)
-# print(location.text)
-# print(postingLink)
-#browser.quit()
-
+print('Login Successful!')
 #create excel if it doesn't exists
 if not (os.path.isfile(cwd+'/Job_Search_Log.xlsx')):
     print('Creating workbook...')
@@ -99,16 +68,44 @@ editBook = load_workbook(filename=cwd+'/Job_Search_Log.xlsx')
 ws = editBook.active
 rowToWrite = str(ws.max_row + 1)
 print('Writing to row ' + rowToWrite + '...')
-print(ws['A'+rowToWrite])
-#TODO: if one of these was not available, need a try, except or something to prevent program crashing
-ws['A' + rowToWrite] = str(name.text)
-ws['B' + rowToWrite] = str(company.text)
-ws['C' + rowToWrite] = str(location.text)
-ws['D' + rowToWrite] = str(postingLink)
-print('cwd')
-print(cwd+'/Job_Search_Log.xlsx')
+
+
+#try to find the element and write it to the sheet. If anything fails, easy exit with an except and print an error
+#TODO: add date, easyapply, etc
+#NAME
+try:
+    name = browser.find_element(By.XPATH, '/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/a/h2')
+    #print(name.text)
+    ws['A' + rowToWrite] = str(name.text)
+except: 
+    print('name failed')
+#COMPANY
+try:
+    company = browser.find_element(By.XPATH,'/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[1]/span[1]/span[1]/a' )
+    #print(company.text)
+    ws['B' + rowToWrite] = str(company.text)
+except: 
+    print('company failed')
+try:
+    print('date')
+except: 
+    print('Date failed')
+#LOCATION
+try:
+    location = browser.find_element(By.XPATH, '/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[1]/span[1]/span[2]')
+    #print(location.text)
+    ws['C' + rowToWrite] = str(location.text)
+except: 
+    print('location failed')
+#LINK
+try:
+    postingLink = browser.find_element(By.XPATH, '/html/body/div[5]/div[3]/div[4]/div/div/main/div/section[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/a')
+    postingLink = postingLink.get_attribute('href')
+    #print(postingLink)
+    ws['D' + rowToWrite] = str(postingLink)
+except: 
+    print('link failed')
+
 editBook.save(cwd+'/Job_Search_Log.xlsx')
 #TODO: tell what you are writing to workbook, ie writing [name,company]
-print('wb saved!')
-# editBook.close()
-    
+print('Workbook saved!')
