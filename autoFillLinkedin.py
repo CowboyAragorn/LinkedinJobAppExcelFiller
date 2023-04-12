@@ -12,8 +12,34 @@ from datetime import date
 import traceback
 
 
-print('Right click the name of a job on linkedin\'s job page, copy the link, and paste it here:')
+def deleteLastRow():
+    try:
+        cwd = os.getcwd()
+        book = load_workbook(filename=cwd+'/Job_Search_Log.xlsx')
+        ws = book.active
+        rowToDelete = int(ws.max_row)
+        if rowToDelete == 0:
+            print('Sorry, can\'t delete the first row')
+            exit()
+        print(rowToDelete)
+        #TODO: format this to display the values being deleted
+        print(ws[rowToDelete][0].value)
+        ws.delete_rows(rowToDelete)
+        print('row ' + str(rowToDelete) + ' deleted.')
+        book.save(cwd+'/Job_Search_Log.xlsx')
+    except:
+        traceback.print_exc()
+        print('An error occured, nothing has been deleted.')
+
+
+
+print('To SAVE new job: Right click the name of a job on linkedin\'s job page, copy the link, and paste it here:')
+print('To DELETE LAST ENTRY: type del and hit enter. Useful when a bad entry is put in. Warning: can not be undone.')
 url = input()
+if url == 'del':
+    deleteLastRow()
+    exit()
+    
 
 #TODO make headless an option
 # runs selenium browser invisibly so you can just operate from CLI
